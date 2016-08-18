@@ -5,7 +5,6 @@ Based on this answer http://stackoverflow.com/questions/1729054/including-depend
 # How to use it
 	You will just need to change the properties for main class and the version of the jarinjarloader.
 	
-	```
 	<project>
 		...
 		<properties>
@@ -73,7 +72,6 @@ Based on this answer http://stackoverflow.com/questions/1729054/including-depend
 			</plugins>
 		</build>
 	</project>
-	```
 
 # How it works
 A classloader will serve classes from all the dependency libraries stored in lib folder in the jar.
