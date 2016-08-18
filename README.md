@@ -4,6 +4,15 @@ This code is based on eclipse jarinjar classloaders from http://git.eclipse.org/
 
 Based on this answer http://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven
 
+# Status
+
+[![Download](https://api.bintray.com/packages/raisercostin/maven/eclipse-jarinjarloader/images/download.svg)](https://bintray.com/raisercostin/maven/eclipse-jarinjarloader/_latestVersion)
+<!--
+[![Build Status](https://travis-ci.org/raisercostin/eclipse-jarinjarloader.svg?branch=master)](https://travis-ci.org/raisercostin/eclipse-jarinjarloader)
+[![Codacy Badge](https://www.codacy.com/project/badge/fe1bb28a7735433d89a238ce6f6305c1)](https://www.codacy.com/app/raisercostin/eclipse-jarinjarloader)
+-->
+
+
 # How to use it
 
 You will just need to change the properties for main class and the version of the jarinjarloader.
@@ -81,6 +90,10 @@ A classloader will serve classes from all the dependency libraries stored in lib
 
 # To do
 - It will be nice for classloader to detect the type of OS and based on that to reconfigure the classpath according to the swt libraries specific to that OS.
+
+# How to build and release
+
+	mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
 
 # Other solutions
 Other similar techniques that don't work properly:
