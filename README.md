@@ -1,9 +1,12 @@
 A custom class loader based on eclipse code.
+
 This code is based on eclipse jarinjar classloaders from http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/plain/org.eclipse.jdt.ui/jar%20in%20jar%20loader/org/eclipse/jdt/internal/jarinjarloader/ .
+
 Based on this answer http://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven
 
 # How to use it
-	You will just need to change the properties for main class and the version of the jarinjarloader.
+
+You will just need to change the properties for main class and the version of the jarinjarloader.
 	
 	<project>
 		...
