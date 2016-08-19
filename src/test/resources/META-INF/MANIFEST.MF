@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: uzene-sayapp
+Implementation-Version: 0.24-SNAPSHOT
+Archiver-Version: Plexus Archiver
+Built-By: raiser
+Specification-Title: uzene-sayapp
+Implementation-Vendor-Id: org.uzene
+Class-Path: ./ lib/org.eclipse.swt.cocoa.macosx.x86_64-4.3
+ .jar
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+Rsrc-Main-Class: org.raisercostin.jarinjarloader.sample.JarInJarSwtMain

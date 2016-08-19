@@ -89,6 +89,7 @@ A classloader will serve classes from all the dependency libraries stored in lib
 
 ## To do
 - It will be nice for classloader to detect the type of OS and based on that to reconfigure the classpath according to the swt libraries specific to that OS.
+This question should provide support http://stackoverflow.com/questions/2706222/create-cross-platform-java-swt-application , http://mchr3k.github.io/swtjar/
 
 ## How to build and release
 
