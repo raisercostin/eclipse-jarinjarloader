@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -42,48 +44,45 @@ public class JarRsrcLoader {
 	private static class ManifestInfo {
 		String rsrcMainClass;
 		String[] rsrcClassPath;
-		/** @see http://maven.apache.org/enforcer/enforcer-rules/requireOS.html */
-		private Map<String,String> librariesToFilter = new TreeMap<>();
+		private Set<String> allFilters = new TreeSet<>();
+		private Map<String, List<String>> libsForFilter = new TreeMap<>();
 
-		public void configureConditionalPath(String[] conditionalLibraries) {
-			if (conditionalLibraries != null)
-				for (String condition : conditionalLibraries) {
-					String[] cond = splitSpaces(condition, ',');
-					String condOsName = cond[0];
-					String condOsArch = cond[1];
-					String libraryName = cond[2];
-					String libValue = condition(condOsName,condOsArch);
-					//System.out.println("conditional library ["+libraryName+"] condition ["+libValue+"]");
-					librariesToFilter.put(libraryName,libValue);
+		final static String CLASS_PATH_FILTER_MATCH_ON = "Class-Path-Filter-Match-On-";
+
+		public void configureConditionalPath(Attributes attrs) {
+			for (Entry<Object, Object> entry : attrs.entrySet()) {
+				String key = entry.getKey().toString();
+				String value = (String) entry.getValue();
+				if (key.startsWith(CLASS_PATH_FILTER_MATCH_ON)) {
+					String[] filters = splitSpaces(value, ' ');
+					String osFilter = key.substring(CLASS_PATH_FILTER_MATCH_ON.length());
+					debug("classpath declared filter [" + osFilter + "] for libraries [" + value + "]");
+					allFilters.addAll(Arrays.asList(filters));
+					libsForFilter.put(osFilter, Arrays.asList(filters));
 				}
+			}
 		}
 
-		public boolean accept(String library, String osName, String osArch) {
+		public boolean accept(String library, String actualOsFilter) {
 			boolean notConditionalLibrarySoAcceptIt = true;
-			String libFilter = condition(osName,osArch);
-			for (Entry<String, String> lib : librariesToFilter.entrySet()) {
-				if (library.contains(lib.getKey())){
+			// debug("analyse " + library);
+			for (String libFilter : allFilters) {
+				if (library.contains(libFilter)) {
+					// debug("found libFilter=" + libFilter + " but valid for [" + libsForFilter.get(actualOsFilter)
+					// + "]");
 					notConditionalLibrarySoAcceptIt = false;
-					String libCondition = lib.getValue();
-					boolean accept = libCondition.equals(libFilter);
-					//System.out.println("conditional lib "+library+"["+libCondition+"] is "+(accept?"accepted":"ignored")+" filter="+libFilter);
-					if(accept==true)
-						//accept early
-						//if false maybe there is another conditional libaray that allowes this library
+					boolean alreadyAccepted = libsForFilter.get(actualOsFilter).contains(libFilter);
+					if (alreadyAccepted)
 						return true;
 				}
 			}
 			return notConditionalLibrarySoAcceptIt;
 		}
-
-		private String condition(String osName, String osArch) {
-			return osName+"---"+osArch;
-		}
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, IOException {
-		ManifestInfo mi = getManifestInfo();
+		ManifestInfo mi = readManifestInfo();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		URL.setURLStreamHandlerFactory(new RsrcURLStreamHandlerFactory(cl));
 		List<String> original = Arrays.asList(mi.rsrcClassPath);
@@ -111,25 +110,8 @@ public class JarRsrcLoader {
 					e);
 		}
 	}
-	private static List<String> filter(ManifestInfo mi, List<String> all) {
-		String osName = System.getProperty("os.name").toLowerCase(Locale.US);
-		String osArch = System.getProperty("os.arch").toLowerCase(Locale.US);
-		String osVersion = System.getProperty("os.version").toLowerCase(Locale.US);
 
-		System.out.println("osName=" + osName);
-		System.out.println("osArch=" + osArch);
-		System.out.println("osVersion=" + osVersion);
-		List<String> result = new ArrayList<>();
-		System.out.println("loading libraries [" + all + "]");
-		for (String library : all) {
-			if (mi.accept(library, osName, osArch))
-				result.add(library);
-		}
-		System.out.println("filtered final libraries [" + result + "]");
-		return result;
-	}
-
-	private static ManifestInfo getManifestInfo() throws IOException {
+	private static ManifestInfo readManifestInfo() throws IOException {
 		Enumeration resEnum;
 		resEnum = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
 		while (resEnum.hasMoreElements()) {
@@ -137,7 +119,7 @@ public class JarRsrcLoader {
 				URL url = (URL) resEnum.nextElement();
 				InputStream is = url.openStream();
 				if (is != null) {
-					System.out.println("reading from " + url);
+					debug("reading from " + url);
 					ManifestInfo result = new ManifestInfo();
 					Manifest manifest = new Manifest(is);
 					Attributes mainAttribs = manifest.getMainAttributes();
@@ -146,20 +128,51 @@ public class JarRsrcLoader {
 					if (rsrcCP == null)
 						rsrcCP = JIJConstants.DEFAULT_REDIRECTED_CLASSPATH;
 					result.rsrcClassPath = splitSpaces(rsrcCP, ' ');
-					result.configureConditionalPath(
-							splitSpaces(mainAttribs.getValue("OS-Conditional-Class-Path"), ':'));
+					result.configureConditionalPath(mainAttribs);
 					if ((result.rsrcMainClass != null) && !result.rsrcMainClass.trim().equals("")) //$NON-NLS-1$
 						return result;
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e);
-				// Silently ignore wrong manifests on classpath?
+				warn("Wrong manifests on classpath", e);
 			}
 		}
 		System.err.println(
 				"Missing attributes for JarRsrcLoader in Manifest (" + JIJConstants.REDIRECTED_MAIN_CLASS_MANIFEST_NAME //$NON-NLS-1$
 						+ ", " + JIJConstants.REDIRECTED_CLASS_PATH_MANIFEST_NAME + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		return null;
+	}
+
+	private static void debug(String message) {
+		System.out.println(message);
+	}
+	private static void warn(String message, Exception e) {
+		System.err.println(message);
+		e.printStackTrace(System.err);
+	}
+
+	private static List<String> filter(ManifestInfo mi, List<String> all) {
+		String osName = System.getProperty("os.name").toLowerCase(Locale.US);
+		String osArch = System.getProperty("os.arch").toLowerCase(Locale.US);
+		// String osVersion = System.getProperty("os.version").toLowerCase(Locale.US);
+
+		String libFilter = condition(osName, osArch);
+		debug("accepting only the libraries not matched at all or the ones declared with ["
+				+ ManifestInfo.CLASS_PATH_FILTER_MATCH_ON + libFilter + "]");
+		List<String> result = new ArrayList<>();
+		debug("analysing libraries [" + all + "]");
+		for (String library : all) {
+			boolean accepted = mi.accept(library, libFilter);
+			if (accepted)
+				result.add(library);
+			debug((accepted ? "accept" : "ignore") + " library [" + library + "]");
+		}
+		debug("filtered final libraries [" + result + "]");
+		return result;
+	}
+
+	/** @see http://maven.apache.org/enforcer/enforcer-rules/requireOS.html */
+	private static String condition(String osName, String osArch) {
+		return ("osName=" + osName + "---osArch=" + osArch).replaceAll("[^a-zA-Z0-9\\-]", "-");
 	}
 
 	/**
@@ -187,3 +200,11 @@ public class JarRsrcLoader {
 	}
 
 }
+/*
+ * Conditional-Class-Path-linux-i386: org.eclipse.swt.gtk.linux.x86 Conditional-Class-Path-linux-x86-64:
+ * org.eclipse.swt.gtk.linux.x86_64 Conditional-Class-Path-linux-amd64: org.eclipse.swt.gtk.linux.x86_64
+ * Conditional-Class-Path-windows-7-x86: org.eclipse.swt.win32.win32.x86 Conditional-Class-Path-windows-x86:
+ * org.eclipse.swt.win32.win32.x86 Conditional-Class-Path-windows-x86-64: org.eclipse.swt.win32.win32.x86_64
+ * Conditional-Class-Path-windows-amd64: org.eclipse.swt.win32.win32.x86_64 Conditional-Class-Path-mac-os-x-i386:
+ * org.eclipse.swt.cocoa.macosx Conditional-Class-Path-mac-os-x-x86-64: org.eclipse.swt.cocoa.macosx.x86_64
+ */
