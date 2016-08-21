@@ -6,13 +6,12 @@
 		<maven>3.0.4</maven>
 	</prerequisites>
 	<parent>
-		<groupId>org.raisercostin.utils</groupId>
-		<artifactId>maven-defaults</artifactId>
-		<version>7</version>
+		<groupId>org.raisercostin</groupId>
+		<artifactId>eclipse-jarinjarloader-parent</artifactId>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>eclipse-jarinjarloader</artifactId>
-	<version>1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -30,10 +29,6 @@
 		<bintray.package>${project.artifactId}</bintray.package>
 		<maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
 	</properties>
-
-	<modules>
-		<module>eclipse-jarinjarloader-swt-sample</module>
-	</modules>
 
 	<url>${github.url}</url>
 	<licenses>
