@@ -7,14 +7,18 @@
 -->
 
 ## Desciption
-A custom class loader based on eclipse code to allow executable jars.
-This code is based on eclipse jarinjar classloaders from http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/plain/org.eclipse.jdt.ui/jar%20in%20jar%20loader/org/eclipse/jdt/internal/jarinjarloader/ .
+A custom class loader based on eclipse code to allow executable jars and custom exclusion of some libraries at runtime.
 
-Based on this answer http://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven
+## Features
+- All libraries are bundled inside jar as jars by maven.
+- Some libraries can be filtered out depending on the runtime operating system. The classloader to detect the type of OS and based on that to reconfigure the classpath according to the swt libraries specific to that OS.
+This question should provide support http://stackoverflow.com/questions/2706222/create-cross-platform-java-swt-application , http://mchr3k.github.io/swtjar/
 
 ## How to use it
 
+See the [eclipse-jarinjarloader-swt-sample/pom.xml](https://github.com/raisercostin/eclipse-jarinjarloader/blob/master/eclipse-jarinjarloader-swt-sample/pom.xml) to see how to configure this.
 You will just need to change the properties for main class and the version of the jarinjarloader.
+
 	
 	<project>
 		...
@@ -87,13 +91,15 @@ You will just need to change the properties for main class and the version of th
 ## How it works
 A classloader will serve classes from all the dependency libraries stored in lib folder in the jar.
 
-## To do
-- It will be nice for classloader to detect the type of OS and based on that to reconfigure the classpath according to the swt libraries specific to that OS.
-This question should provide support http://stackoverflow.com/questions/2706222/create-cross-platform-java-swt-application , http://mchr3k.github.io/swtjar/
 
 ## How to build and release
 
 	mvn release:prepare release:perform -DskipTests=true -Prelease -Darguments="-DskipTests=true -Prelease"
+
+## Credits
+- This code is based on eclipse jarinjar classloaders from [eclipse code](http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/plain/org.eclipse.jdt.ui/jar%20in%20jar%20loader/org/eclipse/jdt/internal/jarinjarloader/).
+- Based on [stackoverflow answer](http://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven).
+
 
 ## Other solutions
 Other similar techniques that don't work properly:
