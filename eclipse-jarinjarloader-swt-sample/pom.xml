@@ -11,7 +11,7 @@
 		<version>7</version>
 	</parent>
 	<groupId>org.raisercostin</groupId>
-	<artifactId>eclipse-jarinjarloader-sample</artifactId>
+	<artifactId>eclipse-jarinjarloader-swt-sample</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

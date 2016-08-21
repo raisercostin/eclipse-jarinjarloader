@@ -31,6 +31,10 @@
 		<maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
 	</properties>
 
+	<modules>
+		<module>eclipse-jarinjarloader-swt-sample</module>
+	</modules>
+
 	<url>${github.url}</url>
 	<licenses>
 		<license>
