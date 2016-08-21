@@ -23,11 +23,11 @@
 		<source.java.version>1.7</source.java.version>
 		<target.java.version>1.7</target.java.version>
 		<github.user>raisercostin</github.user>
-		<github.repo>${project.artifactId}</github.repo>
+		<github.repo>eclipse-jarinjarloader</github.repo>
 		<github.url>https://github.com/${github.user}/${github.repo}</github.url>
 		<bintray.user>raisercostin</bintray.user>
 		<bintray.repo>maven</bintray.repo>
-		<bintray.package>${project.artifactId}</bintray.package>
+		<bintray.package>${github.repo}</bintray.package>
 		<maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
 	</properties>
 
