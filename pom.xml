@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -11,7 +12,7 @@
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>eclipse-jarinjarloader-parent</artifactId>
-	<version>1.1</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -54,7 +55,7 @@
 		<connection>scm:git:${github.url}.git</connection>
 		<developerConnection>scm:git:${github.url}.git</developerConnection>
 		<url>${github.url}</url>
-		<tag>eclipse-jarinjarloader-parent-1.1</tag>
+		<tag>${project.artifactId}-${project.version}</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
