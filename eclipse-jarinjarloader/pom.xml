@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.raisercostin</groupId>
 		<artifactId>eclipse-jarinjarloader-parent</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>1.2</version>
 	</parent>
 	<groupId>org.raisercostin</groupId>
 	<artifactId>eclipse-jarinjarloader</artifactId>
@@ -48,7 +48,7 @@
 		<connection>scm:git:${github.url}.git</connection>
 		<developerConnection>scm:git:${github.url}.git</developerConnection>
 		<url>${github.url}</url>
-		<tag>${project.artifactId}-${project.version}</tag>
+		<tag>eclipse-jarinjarloader-parent-1.2</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
