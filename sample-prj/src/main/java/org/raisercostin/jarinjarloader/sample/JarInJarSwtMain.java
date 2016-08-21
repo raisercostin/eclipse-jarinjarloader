@@ -21,6 +21,7 @@ public class JarInJarSwtMain extends Shell {
 				}
 			}
 		} catch (Exception e) {
+			System.err.println("On OSX try to pass -XstartOnFirstThread to jvm.");
 			e.printStackTrace();
 		}
 	}
