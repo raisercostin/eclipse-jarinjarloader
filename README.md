@@ -19,7 +19,6 @@ This question should provide support http://stackoverflow.com/questions/2706222/
 See the [eclipse-jarinjarloader-swt-sample/pom.xml](https://github.com/raisercostin/eclipse-jarinjarloader/blob/master/eclipse-jarinjarloader-swt-sample/pom.xml) to see how to configure this.
 You will just need to change the properties for main class and the version of the jarinjarloader.
 
-	```
 	<?xml version="1.0" encoding="UTF-8"?>
 	<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<modelVersion>4.0.0</modelVersion>
@@ -261,7 +260,6 @@ You will just need to change the properties for main class and the version of th
 			</repository>
 		</repositories>
 	</project>
-	```
 
 ## How it works
 A classloader will serve classes from all the dependency libraries stored in lib folder in the jar.
