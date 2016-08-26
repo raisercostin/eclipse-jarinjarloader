@@ -276,6 +276,7 @@ A classloader will serve classes from all the dependency libraries stored in lib
 
 ## Other solutions
 Other similar techniques that don't work properly:
+- [springboot - executable jar](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#executable-jar)
 - onejar - http://one-jar.sourceforge.net/ , https://code.google.com/archive/p/onejar-maven-plugin/ , 
 - uberjar - http://fiji.sc/Uber-JAR
 - maven assembly jar-with-dependencies
