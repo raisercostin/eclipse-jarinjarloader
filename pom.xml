@@ -32,7 +32,6 @@
 
 	<modules>
 		<module>eclipse-jarinjarloader</module>
-		<module>eclipse-jarinjarloader-swt-sample</module>
 	</modules>
 
 	<url>${github.url}</url>
