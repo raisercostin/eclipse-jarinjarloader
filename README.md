@@ -280,9 +280,9 @@ Other similar techniques that don't work properly:
 - onejar - http://one-jar.sourceforge.net/ , https://code.google.com/archive/p/onejar-maven-plugin/ , 
 - uberjar - http://fiji.sc/Uber-JAR
 - maven assembly jar-with-dependencies
-- shade - http://maven.apache.org/plugins/maven-shade-plugin/index.html
+- shade - http://maven.apache.org/plugins/maven-shade-plugin/index.html - This plugin provides the capability to package the artifact in an uber-jar, including its dependencies and to shade - i.e. rename - the packages of some of the dependencies.
 - war - 
-- guardpro - 
+- proguard - http://www.alexeyshmalko.com/2014/proguard-real-world-example
 
 ```
 There are three common methods for constructing an uber-JAR:
